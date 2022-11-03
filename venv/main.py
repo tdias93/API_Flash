@@ -1,10 +1,10 @@
-from flask import Flask, make_response, jsonify, request, abort
-from jsonschema import validate, ValidationError, Draft202012Validator, SchemaError
+from flask import Flask, make_response, jsonify, request
+from jsonschema import validate, ValidationError, SchemaError
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 
-@app.route('/teste', methods=['POST'])
+@app.route('/comprovante', methods=['POST'])
 def creat_nf():
 
     try:
@@ -13,17 +13,19 @@ def creat_nf():
         nf = request.json
         dados.append(nf)
 
-        retorno = make_response(jsonify(mensage = f'CADASTRO REALIZADO')), 200
+        retorno = make_response(jsonify(status = 'OK', mensage = f'CADASTRO REALIZADO')), 200
 
-    except SchemaError as e:
-        print("There is an error with the schema")
+    except SchemaError as err:
+        retorno = make_response(jsonify(status = 'ERROR', mensage = err.message)), 400
     
     except ValidationError as err:
-        retorno = make_response(jsonify(mensage = f'ERRO DE SINTAXE - JSON PATH: {err.path[0]}, MESSAGE: {err.message}')), 400
-        #abort(400, 'ERRO DE SINTAXE - {err.message}', "TESTE")
+        if err.validator == 'type':
+            retorno = make_response(jsonify(status = 'ERROR', mensage = f'JSON PATH: {err.path[0]}, MESSAGE: {err.message}')), 400
+        else:
+            retorno = make_response(jsonify(status = 'ERROR', mensage = err.message)), 400
 
     except:
-        retorno = make_response(jsonify(mensage = f'ERRO DE SINTAXE')), 500
+        retorno = make_response(jsonify(mensage = f'Internal Server Error')), 500
 
     return retorno
 
@@ -31,45 +33,49 @@ def creat_nf():
 schema = {
     "type": "object",
     "properties": {
-        "cnpj": {
-            "type" : "string"
-            },
-        "nome": {
-            "type" : "string"
-            },
-        "nota_fiscal": {
+        "cnpj_faturado": {
             "type" : "string"
             },
         "conhecimento": {
             "type" : "string"
             },
-        "data_emissao": {
+        "nota_fiscal": {
             "type" : "string"
             },
-        "comprovante": {
+        "nome_integracao": {
+            "type" : "string"
+            },
+        "data_emissao": {
+            "type": "string",
+            "format": "date-time"
+            },
+        "imagem": {
             "type" : "string"
             },
     },
     "required":[
-      "cnpj",
-      "nota_fiscal",
+      "cnpj_faturado",
       "conhecimento",
+      "nota_fiscal",
+      "nome_integracao",
       "data_emissao",
-      "comprovante"
+      "imagem"
    ]
 }
 
 dados = [
     {
-        "cnpj": "10750264000116",
-        "nome": "TESTE 01",
+        "cnpj_faturado": "10750264000116",
+        "conhecimento": "123456",
         "nota_fiscal": "1234",
-        "conhecimento": "5678",
-        "data_emissao": "10/05/2022",
-        "comprovante": "IMAGEM - BINARIA"
+        "nome_integracao": "Frete Rápido - 1",
+        "data_emissao": "2022-10-03 13:58:00",
+        "imagem": "basa64"
     }
 ]
 
 # https://www.youtube.com/watch?v=LP8besicfH4
+# https://opis.io/json-schema/2.x/formats.html
+# https://www.devmedia.com.br/http-status-code/41222#4-1
 
 app.run()
