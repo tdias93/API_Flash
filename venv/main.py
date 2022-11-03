@@ -1,5 +1,5 @@
-from flask import Flask, make_response, jsonify, request
-from jsonschema import validate, ValidationError
+from flask import Flask, make_response, jsonify, request, abort
+from jsonschema import validate, ValidationError, Draft202012Validator, SchemaError
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
@@ -7,21 +7,23 @@ app.config['JSON_SORT_KEYS'] = False
 @app.route('/teste', methods=['POST'])
 def creat_nf():
 
-    try :
+    try:
         validate(instance=request.json, schema=schema)
 
         nf = request.json
         dados.append(nf)
 
-        retorno = make_response(jsonify(dados))
+        retorno = make_response(jsonify(mensage = f'CADASTRO REALIZADO')), 200
+
+    except SchemaError as e:
+        print("There is an error with the schema")
     
     except ValidationError as err:
+        retorno = make_response(jsonify(mensage = f'ERRO DE SINTAXE - JSON PATH: {err.path[0]}, MESSAGE: {err.message}')), 400
+        #abort(400, 'ERRO DE SINTAXE - {err.message}', "TESTE")
 
-        retorno = make_response(jsonify(mensage = f'ERRO DE SINTAXE - {err.message}'))
-
-    except :
-
-        retorno = make_response(jsonify(mensage = f'ERRO DE SINTAXE'))
+    except:
+        retorno = make_response(jsonify(mensage = f'ERRO DE SINTAXE')), 500
 
     return retorno
 
