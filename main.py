@@ -1,42 +1,70 @@
 from flask import Flask, make_response, jsonify, request
 from jsonschema import validate, ValidationError, SchemaError
-from decode_binary import Decode
-from convert_image import Convertjpg
+from DecodeBinary import Decode
+from ProcessaArquivo import ProcessaArquivo
+
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 
+# Rota do EndPoint
 @app.route('/comprovante', methods=['POST'])
-def creat_nf():
+def Comprovante():
 
     try:
+
+        # Valida Configuração do Json com a estrutura enviada
         validate(instance=request.json, schema=schema)
 
         nf = request.json
-        dados.append(nf)
 
-        file = Decode.DecodeBinary(nf['imagem'], nf['extencao'])
-        Convertjpg(file, nf['extencao'], nf['nome_integracao'], nf['cnpj_faturado'], nf['nota_fiscal'], nf['data_emissao'])
+        # Transforma binario em arquivo
+        processo = Decode.DecodeBinary(nf['imagem'], nf['extencao'])
 
+        if processo[0]:
 
-        retorno = make_response(jsonify(status = 'OK', mensage = f'CADASTRO REALIZADO')), 200
+            # Converte arquivos para JPG e gera link compartilhado
+            processo = ProcessaArquivo(processo[1], nf['extencao'], nf['nome_integracao'], nf['cnpj_faturado'], nf['nota_fiscal'], nf['data_emissao'])
+
+            # Monta Json de Retorno
+            retorno = make_response(jsonify(status = 'OK', mensage = f'CADASTRO REALIZADO', link = processo[1])), 200
+
+        else: 
+
+            # Monta Json de Retorno
+            retorno = make_response(jsonify(mensage = f'Internal Server Error')), 500
 
 
     except SchemaError as err:
+
+        # Monta Json de Retorno
         retorno = make_response(jsonify(status = 'ERROR', mensage = err.message)), 400
     
     except ValidationError as err:
+
+        # Valida o tipo do erro na estrutura
         if err.validator == 'type':
+
+            # Monta Json de Retorno
             retorno = make_response(jsonify(status = 'ERROR', mensage = f'JSON PATH: {err.path[0]}, MESSAGE: {err.message}')), 400
         else:
+
+            # Monta Json de Retorno
             retorno = make_response(jsonify(status = 'ERROR', mensage = err.message)), 400
 
-    except ValueError:
+    except Exception as errorDesc:
+
+        # Monta Json de Retorno
         retorno = make_response(jsonify(mensage = f'Internal Server Error')), 500
 
     return retorno
 
+# https://www.youtube.com/watch?v=LP8besicfH4
+# https://opis.io/json-schema/2.x/formats.html
+# https://www.devmedia.com.br/http-status-code/41222#4-1
 
+
+# Configuração da estrutura JSON
 schema = {
     "type": "object",
     "properties": {
@@ -74,19 +102,5 @@ schema = {
    ]
 }
 
-dados = [
-    {
-        "cnpj_faturado": "10750264000116",
-        "conhecimento": "123456",
-        "nota_fiscal": "1234",
-        "nome_integracao": "Frete Rápido - 1",
-        "data_emissao": "2022-10-03 13:58:00",
-        "imagem": "basa64"
-    }
-]
-
-# https://www.youtube.com/watch?v=LP8besicfH4
-# https://opis.io/json-schema/2.x/formats.html
-# https://www.devmedia.com.br/http-status-code/41222#4-1
-
-app.run()
+if __name__ == '__main__':
+    app.run()

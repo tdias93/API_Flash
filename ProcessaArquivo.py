@@ -3,7 +3,7 @@ import configparser
 
 from PIL import Image
 #from struct import pack
-#from ReportLog import Log
+from ReportLog import Log
 from datetime import datetime
 from pdf2image import convert_from_path
 
@@ -11,7 +11,7 @@ from pdf2image import convert_from_path
 #----------------------------------------------------------
 #   CONVERTE IMAGEM PARA JPG
 #----------------------------------------------------------
-def Convertjpg(dirProvisorio, extArquivo, integracao, cnpjCliente, numeroNf, dtEmissao):
+def ProcessaArquivo(dirProvisorio, extArquivo, integracao, cnpjCliente, numeroNf, dtEmissao):
 
     """ Converte Imagens para o Formato JPG
 
@@ -24,39 +24,42 @@ def Convertjpg(dirProvisorio, extArquivo, integracao, cnpjCliente, numeroNf, dtE
             dtEmissao     (str) : Data de emissão do CTe
         
         Returns:
-            dirProvisorio : Caminho do Arquivo Convertido
-            ArquivoNew    : Nome do Arquivo
-            url           : URL do Arquivo Convertido
-            status        : Status da Conversão (OK ou Error)
-            errorDesc     : Descrição do Erro
+            status     : True -> Proceeso OK | False -> Processo com Falha
+            dirArquivo : Link Compartilhado
 
     """
-
-    """ 
+     
+    # Carrega informações de configuração
     config = configparser.ConfigParser()
     config.read(f"{os.path.dirname(os.path.realpath(__file__))}\\system\\Config.ini")
 
     host = config.get('DIR', 'host')        # Le Arquivo .ini e retorna o host
     raiz = config.get('DIR', 'raiz')        # Le Arquivo .ini e retorna o dir raiz
-    
+       
     Log(event = 'CONVERTENDO IMAGEM', eventLog = 'INICIANDO CONVERSAO DE IMAGEM PARA JPG', terminal = False)  # Gera Log de Execução
-    Log(event = 'CONVERTENDO IMAGEM', eventLog = f'Arquivo: {dirProvisorio}', terminal = False)                  # Gera Log de Execução
-    """
-
+    Log(event = 'CONVERTENDO IMAGEM', eventLog = f'Arquivo: {dirProvisorio}', terminal = False)               # Gera Log de Execução
+    
+    # Lista com os meses do ano
     listMes = ['OUTROS','JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ']
-    raiz = f'{os.path.dirname(os.path.realpath(__file__))}\\system'
 
+    # Converte data de string para date
     data = datetime.strptime(dtEmissao, '%Y-%m-%d')
 
-    # Diretorio para salvar imagem
-    dirArquivo = f'{raiz}\\{integracao}\\{str(data.year)}\\{listMes[data.month]}\\{str(data.day)}\\'
+    # Estrutura da pasta
+    estruturaPasta = f'{integracao}\\{str(data.year)}\\{listMes[data.month]}\\{str("%02d" % data.day)}\\'
 
+    # Diretorio raiz
+    dirArquivo = f'{raiz}\\{estruturaPasta}'
+
+    # Nome do arquivo
+    nomeArquivo = f'{cnpjCliente}_{numeroNf}.jpg'
+    
     # Valida se o diretorio existe
     if not os.path.exists(dirArquivo):
         os.makedirs(dirArquivo)
 
-    # Renomei arquivo passando nova extensão
-    dirArquivo = f'{dirArquivo}\\{cnpjCliente}_{numeroNf}.jpg'
+    # Diretorio absoluto
+    dirArquivo = f'{dirArquivo}\\{nomeArquivo}'
 
     try:
 
@@ -84,22 +87,27 @@ def Convertjpg(dirProvisorio, extArquivo, integracao, cnpjCliente, numeroNf, dtE
             # Salva binario
             rgbImg.save(dirArquivo)
 
-        #Log(event = 'CONVERTENDO IMAGEM', eventLog = 'CONVERSÃO REALIZADA COM SUCESSO', terminal = False)        # Gera Log de Execução
-        #Log(event = 'CONVERTENDO IMAGEM', eventLog = f'Arquivo: {dirArquivoNew + nomArquivo}', terminal = False) # Gera Log de Execução
+        Log(event = 'CONVERTENDO IMAGEM', eventLog = 'CONVERSAO REALIZADA COM SUCESSO', terminal = False)        # Gera Log de Execução
 
-        status = 'OK'
+        # Remove arquivo provisorio
+        os.remove(dirProvisorio)
 
-        return dirArquivo, status
+        status = True
+        url = host + estruturaPasta.replace('\\', '/') + nomeArquivo
 
-    except Exception as err:
+        return status, url
+
+    except Exception as errorDesc:
     
-        status = 'ERROR'
-        errorDesc = str(err)
+        status = False
 
-        #Log(event = 'CONVERTENDO IMAGEM', error = errorDesc, terminal = False) # Gera Log de Execução
+        Log(event = 'CONVERTENDO IMAGEM', error = errorDesc, terminal = False) # Gera Log de Execução
 
-        return '', status, errorDesc
+        # Remove arquivo provisorio
+        os.remove(dirProvisorio)
+
+        return status
 
 
 if __name__ == '__main__':
-    Convertjpg(dirProvisorio = '', extArquivo = '', integracao = '', cnpjCliente = '', numeroNf = '', dtEmissao = '')
+    ProcessaArquivo(dirProvisorio = '', extArquivo = '', integracao = '', cnpjCliente = '', numeroNf = '', dtEmissao = '')
