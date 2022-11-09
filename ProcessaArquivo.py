@@ -31,7 +31,7 @@ def ProcessaArquivo(dirProvisorio, extArquivo, integracao, cnpjCliente, numeroNf
      
     # Carrega informações de configuração
     config = configparser.ConfigParser()
-    config.read(f"{os.path.dirname(os.path.realpath(__file__))}\\system\\Config.ini")
+    config.read(f"{os.path.dirname(os.path.realpath(__file__))}/system/Config.ini")
 
     host = config.get('DIR', 'host')        # Le Arquivo .ini e retorna o host
     raiz = config.get('DIR', 'raiz')        # Le Arquivo .ini e retorna o dir raiz
@@ -69,12 +69,26 @@ def ProcessaArquivo(dirProvisorio, extArquivo, integracao, cnpjCliente, numeroNf
             filePath = dirProvisorio
             popplerPath = f'{os.path.dirname(os.path.realpath(__file__))}\\system\\poppler-0.68.0\\bin'
 
-            # Abre arquivo da imagem
-            imagem = convert_from_path(filePath, poppler_path = popplerPath)
+            if os.name == 'nt':
+
+                # Abre arquivo da imagem
+                # imagem = convert_from_path(filePath, poppler_path = popplerPath)
+
+                for rgbImg in convert_from_path(filePath, poppler_path = popplerPath):
+                    rgbImg.save(dirArquivo, 'JPEG')
+
+            else:
+
+                for rgbImg in convert_from_path(filePath):
+                    rgbImg.save(dirArquivo, 'JPEG')
+
+                # Abre arquivo da imagem
+                #imagem = convert_from_path(filePath)
+
 
             # Salva binario
-            for rgbImg in imagem:
-                rgbImg.save(dirArquivo, 'JPEG')
+            """ for rgbImg in imagem:
+                rgbImg.save(dirArquivo, 'JPEG') """
 
         else:
 
