@@ -31,7 +31,7 @@ def ProcessaArquivo(dirProvisorio, extArquivo, integracao, cnpjCliente, numeroNf
      
     # Carrega informações de configuração
     config = configparser.ConfigParser()
-    config.read(f"{os.path.dirname(os.path.realpath(__file__))}/system/Config.ini")
+    config.read(f"{os.path.dirname(os.path.realpath(__file__))}/system/config.ini")
 
     host = config.get('DIR', 'host')        # Le Arquivo .ini e retorna o host
     raiz = config.get('DIR', 'raiz')        # Le Arquivo .ini e retorna o dir raiz
