@@ -1,5 +1,7 @@
 from flask import Flask, make_response, jsonify, request
 from jsonschema import validate, ValidationError, SchemaError
+from decode_binary import Decode
+from convert_image import Convertjpg
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
@@ -13,7 +15,12 @@ def creat_nf():
         nf = request.json
         dados.append(nf)
 
+        file = Decode.DecodeBinary(nf['imagem'], nf['extencao'])
+        Convertjpg(file, nf['extencao'], nf['nome_integracao'], nf['cnpj_faturado'], nf['nota_fiscal'], nf['data_emissao'])
+
+
         retorno = make_response(jsonify(status = 'OK', mensage = f'CADASTRO REALIZADO')), 200
+
 
     except SchemaError as err:
         retorno = make_response(jsonify(status = 'ERROR', mensage = err.message)), 400
@@ -24,7 +31,7 @@ def creat_nf():
         else:
             retorno = make_response(jsonify(status = 'ERROR', mensage = err.message)), 400
 
-    except:
+    except ValueError:
         retorno = make_response(jsonify(mensage = f'Internal Server Error')), 500
 
     return retorno
@@ -52,6 +59,9 @@ schema = {
         "imagem": {
             "type" : "string"
             },
+        "extencao": {
+            "type" : "string"
+            },
     },
     "required":[
       "cnpj_faturado",
@@ -59,7 +69,8 @@ schema = {
       "nota_fiscal",
       "nome_integracao",
       "data_emissao",
-      "imagem"
+      "imagem",
+      "extencao"
    ]
 }
 
