@@ -63,7 +63,7 @@ class Decode():
                 extencao = imghdr.what(None, h = base64.b64decode(file))
 
             # Valida a extenção
-            if extencao.upper() in ('.PDF', None):
+            if extencao == None or extencao.upper() == '.PDF':
 
                 # Decodifica o binaro
                 decoded_file = base64.b64decode(file)
