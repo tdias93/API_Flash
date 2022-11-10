@@ -32,7 +32,7 @@ def Log(event, eventLog = '---', error = '---', line = False, terminal = True, w
     if writeLog:
 
         # Abre Arquivo De Texto
-        doc = open(f'{os.path.dirname(os.path.realpath(__file__))}\\system\\Log.txt', 'a')
+        doc = open(f'{os.path.dirname(os.path.realpath(__file__))}/system/Log.txt', 'a')
 
         # Registro O Evento No Arquivo
         doc.writelines(f'Event      : {event}    \n'

@@ -33,8 +33,8 @@ def ProcessaArquivo(dirProvisorio, extArquivo, integracao, cnpjCliente, numeroNf
     host = Configuracao.dir_host          # Retorna o host
     raiz = Configuracao.dir_raiz          # Retorna o dir raiz
        
-    Log(event = 'CONVERTENDO IMAGEM', eventLog = 'INICIANDO CONVERSAO DE IMAGEM PARA JPG', terminal = False)  # Gera Log de Execução
-    Log(event = 'CONVERTENDO IMAGEM', eventLog = f'Arquivo: {dirProvisorio}', terminal = False)               # Gera Log de Execução
+    Log(event = 'PROCESSANDO ARQUIVO', eventLog = 'INICIANDO CONVERSAO DE IMAGEM PARA JPG', terminal = False)  # Gera Log de Execução
+    Log(event = 'PROCESSANDO ARQUIVO', eventLog = f'Arquivo: {dirProvisorio}', terminal = False)               # Gera Log de Execução
     
     # Lista com os meses do ano
     listMes = ['OUTROS','JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ']
@@ -59,6 +59,12 @@ def ProcessaArquivo(dirProvisorio, extArquivo, integracao, cnpjCliente, numeroNf
     dirArquivo = f'{dirArquivo}/{nomeArquivo}'
 
     try:
+
+        # Valida se a extenção está preenchida
+        if extArquivo.replace(" ", "") == '':
+
+            # Pega extenção do arquivo
+            extArquivo = f'.{dirProvisorio.split(".")[1]}'
 
         # Valida extenção da imagem
         if extArquivo.upper() == '.PDF':
@@ -90,7 +96,7 @@ def ProcessaArquivo(dirProvisorio, extArquivo, integracao, cnpjCliente, numeroNf
             # Salva binario
             rgbImg.save(dirArquivo)
 
-        Log(event = 'CONVERTENDO IMAGEM', eventLog = 'CONVERSAO REALIZADA COM SUCESSO', terminal = False)        # Gera Log de Execução
+        Log(event = 'PROCESSANDO ARQUIVO', eventLog = 'CONVERSAO REALIZADA COM SUCESSO', terminal = False)        # Gera Log de Execução
 
         # Remove arquivo provisorio
         os.remove(dirProvisorio)
@@ -104,7 +110,7 @@ def ProcessaArquivo(dirProvisorio, extArquivo, integracao, cnpjCliente, numeroNf
     
         status = False
 
-        Log(event = 'CONVERTENDO IMAGEM', error = errorDesc, terminal = False) # Gera Log de Execução
+        Log(event = 'PROCESSANDO ARQUIVO', error = errorDesc, terminal = False) # Gera Log de Execução
 
         # Remove arquivo provisorio
         os.remove(dirProvisorio)

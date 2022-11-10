@@ -4,6 +4,7 @@ import os
 import base64
 import random
 import string
+import imghdr
 import Configuracao
 
 
@@ -55,8 +56,14 @@ class Decode():
 
             Log(event = 'CONVERTENDO BINARIO', eventLog = 'INICIANDO CONVERSAO DE BINARIO PARA ARQUIVO', terminal = False)  # Gera Log de Execução
 
+            # Valida se a extenção está preenchida
+            if extencao.replace(" ", "")  == '':
+                
+                # Pega extenção do arquivo - None = PDF
+                extencao = imghdr.what(None, h = base64.b64decode(file))
+
             # Valida a extenção
-            if extencao.upper() == '.PDF':
+            if extencao.upper() in ('.PDF', None):
 
                 # Decodifica o binaro
                 decoded_file = base64.b64decode(file)
@@ -75,7 +82,7 @@ class Decode():
                 decoded_file = base64.b64decode(file)
 
                 # Monta o diretorio do arquivo
-                file_dir = f'{dirRaiz}temp\\{nome}{nome}.JPG'
+                file_dir = f'{dirRaiz}{nome}.JPG'
 
                 # Escreve o arquivo no diretorio apontado
                 file = open(file_dir, 'wb')
