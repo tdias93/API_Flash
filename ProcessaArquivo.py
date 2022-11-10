@@ -1,11 +1,10 @@
-import os
-import configparser
-
 from PIL import Image
-#from struct import pack
 from ReportLog import Log
 from datetime import datetime
 from pdf2image import convert_from_path
+
+import os
+import Configuracao
 
 
 #----------------------------------------------------------
@@ -26,15 +25,13 @@ def ProcessaArquivo(dirProvisorio, extArquivo, integracao, cnpjCliente, numeroNf
         Returns:
             status     : True -> Proceeso OK | False -> Processo com Falha
             dirArquivo : Link Compartilhado
+            errorDesc  : Detalhes do Erro, se tiver
 
     """
      
     # Carrega informações de configuração
-    config = configparser.ConfigParser()
-    config.read(f"{os.path.dirname(os.path.realpath(__file__))}/system/config.ini")
-
-    host = config.get('DIR', 'host')        # Le Arquivo .ini e retorna o host
-    raiz = config.get('DIR', 'raiz')        # Le Arquivo .ini e retorna o dir raiz
+    host = Configuracao.dir_host          # Retorna o host
+    raiz = Configuracao.dir_raiz          # Retorna o dir raiz
        
     Log(event = 'CONVERTENDO IMAGEM', eventLog = 'INICIANDO CONVERSAO DE IMAGEM PARA JPG', terminal = False)  # Gera Log de Execução
     Log(event = 'CONVERTENDO IMAGEM', eventLog = f'Arquivo: {dirProvisorio}', terminal = False)               # Gera Log de Execução
@@ -67,28 +64,20 @@ def ProcessaArquivo(dirProvisorio, extArquivo, integracao, cnpjCliente, numeroNf
         if extArquivo.upper() == '.PDF':
 
             filePath = dirProvisorio
-            popplerPath = f'{os.path.dirname(os.path.realpath(__file__))}\\system\\poppler-0.68.0\\bin'
+            popplerPath = f'{os.path.dirname(os.path.realpath(__file__))}\\system\\extra\poppler-0.68.0\\bin'
 
+            # Valida SO
             if os.name == 'nt':
 
-                # Abre arquivo da imagem
-                # imagem = convert_from_path(filePath, poppler_path = popplerPath)
-
+                # Abre arquivo e salva no novo diretorio como imagem
                 for rgbImg in convert_from_path(filePath, poppler_path = popplerPath):
                     rgbImg.save(dirArquivo, 'JPEG')
 
             else:
 
+                # Abre arquivo e salva no novo diretorio como imagem
                 for rgbImg in convert_from_path(filePath):
                     rgbImg.save(dirArquivo, 'JPEG')
-
-                # Abre arquivo da imagem
-                #imagem = convert_from_path(filePath)
-
-
-            # Salva binario
-            """ for rgbImg in imagem:
-                rgbImg.save(dirArquivo, 'JPEG') """
 
         else:
 
@@ -109,7 +98,7 @@ def ProcessaArquivo(dirProvisorio, extArquivo, integracao, cnpjCliente, numeroNf
         status = True
         url = host + estruturaPasta.replace('\\', '/') + nomeArquivo
 
-        return status, url
+        return status, url, ''
 
     except Exception as errorDesc:
     
@@ -120,7 +109,7 @@ def ProcessaArquivo(dirProvisorio, extArquivo, integracao, cnpjCliente, numeroNf
         # Remove arquivo provisorio
         os.remove(dirProvisorio)
 
-        return status
+        return status, '', errorDesc
 
 
 if __name__ == '__main__':

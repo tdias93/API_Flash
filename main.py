@@ -1,7 +1,10 @@
-from flask import Flask, make_response, jsonify, request
-from jsonschema import validate, ValidationError, SchemaError
+from ReportLog import Log
 from DecodeBinary import Decode
 from ProcessaArquivo import ProcessaArquivo
+from flask import Flask, make_response, jsonify, request
+from jsonschema import validate, ValidationError, SchemaError
+
+import Configuracao
 
 
 app = Flask(__name__)
@@ -13,32 +16,54 @@ def Comprovante():
 
     try:
 
+        Log(event = 'API - COMPROVANTES', eventLog = 'DADOS RECEBIDOS', terminal = False)              # Gera Log de Execução
+        Log(event = 'API - COMPROVANTES', eventLog = 'PROCESSANDO DADOS RECEBIDOS', terminal = False)  # Gera Log de Execução
+
         # Valida Configuração do Json com a estrutura enviada
         validate(instance=request.json, schema=schema)
 
         nf = request.json
 
         # Transforma binario em arquivo
-        processo = Decode.DecodeBinary(nf['imagem'], nf['extencao'])
+        processoDecode = Decode.DecodeBinary(nf['imagem'], nf['extencao'])
 
-        if processo[0]:
+        if processoDecode[0]:
 
             # Converte arquivos para JPG e gera link compartilhado
-            processo = ProcessaArquivo(processo[1], nf['extencao'], nf['nome_integracao'], nf['cnpj_faturado'], nf['nota_fiscal'], nf['data_emissao'])
+            processoArquivo = ProcessaArquivo(processoDecode[1], nf['extencao'], nf['nome_integracao'], nf['cnpj_faturado'], nf['nota_fiscal'], nf['data_emissao'])
 
-            # Monta Json de Retorno
-            retorno = make_response(jsonify(status = 'OK', mensage = f'CADASTRO REALIZADO', link = processo[1])), 200
+            if processoArquivo[0]:
+
+                # Monta Json de Retorno
+                retorno = make_response(jsonify(status = 'OK', mensage = f'CADASTRO REALIZADO', link = processoArquivo[1])), 200
+
+                # Gera Log de Execução
+                Log(event = 'API - COMPROVANTES', eventLog = 'DADOS PROCESSANDO COM SUCESSO', terminal = False)  
+
+            else:
+
+                # Monta Json de Retorno
+                retorno = make_response(jsonify(mensage = f'Internal Server Error')), 500
+
+                # Gera Log de Execução
+                Log(event = 'API - COMPROVANTES', error = processoDecode[2], terminal = False)
 
         else: 
 
             # Monta Json de Retorno
             retorno = make_response(jsonify(mensage = f'Internal Server Error')), 500
 
+            # Gera Log de Execução
+            Log(event = 'API - COMPROVANTES', error = processoDecode[2], terminal = False)
+
 
     except SchemaError as err:
 
         # Monta Json de Retorno
         retorno = make_response(jsonify(status = 'ERROR', mensage = err.message)), 400
+
+        # Gera Log de Execução
+        Log(event = 'API - COMPROVANTES', error = err, terminal = False) 
     
     except ValidationError as err:
 
@@ -52,10 +77,16 @@ def Comprovante():
             # Monta Json de Retorno
             retorno = make_response(jsonify(status = 'ERROR', mensage = err.message)), 400
 
-    except Exception as errorDesc:
+        # Gera Log de Execução
+        Log(event = 'API - COMPROVANTES', error = err, terminal = False) 
+
+    except Exception as err:
 
         # Monta Json de Retorno
         retorno = make_response(jsonify(mensage = f'Internal Server Error')), 500
+
+        # Gera Log de Execução
+        Log(event = 'API - COMPROVANTES', error = err, terminal = False) 
 
     return retorno
 
@@ -103,4 +134,5 @@ schema = {
 }
 
 if __name__ == '__main__':
+    Configuracao
     app.run()

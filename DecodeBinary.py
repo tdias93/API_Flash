@@ -1,10 +1,15 @@
-import base64, random, string, os
-
 from ReportLog import Log
+
+import os
+import base64
+import random
+import string
+import Configuracao
+
 
 class Decode():
 
-    def random_generator(size=10):
+    def RandomText(size = 10):
 
         """ Gera String Aleatorio
 
@@ -30,18 +35,25 @@ class Decode():
             extencao (str) : Extenção Original do Arquivo
 
         Returns:
-            status   : True -> Proceeso OK | False -> Processo com Falha
-            file_dir : Caminho Absoluto do Arquivo
+            status    : True -> Proceeso OK | False -> Processo com Falha
+            file_dir  : Caminho Absoluto do Arquivo
+            errorDesc : Detalhes do Erro, se tiver
 
         """
         
         # Gera nome aleatorio para o arquivo
-        nome = Decode.random_generator()
+        nome = Decode.RandomText()
 
         try:
 
+            # Cria o diretorio raiz
+            dirRaiz = f'{Configuracao.dir_raiz}\\temp\\'
+
+            # Valida se o diretorio existe
+            if not os.path.exists(dirRaiz):
+                os.makedirs(dirRaiz)
+
             Log(event = 'CONVERTENDO BINARIO', eventLog = 'INICIANDO CONVERSAO DE BINARIO PARA ARQUIVO', terminal = False)  # Gera Log de Execução
-            Log(event = 'CONVERTENDO IMAGEM', eventLog = f'Arquivo: {file}', terminal = False)                              # Gera Log de Execução
 
             # Valida a extenção
             if extencao.upper() == '.PDF':
@@ -50,7 +62,7 @@ class Decode():
                 decoded_file = base64.b64decode(file)
 
                 # Monta o diretorio do arquivo
-                file_dir = f'{os.path.dirname(os.path.realpath(__file__))}\\system\\file\\{nome}.PDF'
+                file_dir = f'{dirRaiz}{nome}.PDF'
 
                 # Escreve o arquivo no diretorio apontado
                 file = open(file_dir, 'wb')
@@ -63,7 +75,7 @@ class Decode():
                 decoded_file = base64.b64decode(file)
 
                 # Monta o diretorio do arquivo
-                file_dir = f'{os.path.dirname(os.path.realpath(__file__))}\\system\\file\\{nome}.JPG'
+                file_dir = f'{dirRaiz}temp\\{nome}{nome}.JPG'
 
                 # Escreve o arquivo no diretorio apontado
                 file = open(file_dir, 'wb')
@@ -75,7 +87,7 @@ class Decode():
 
             status = True
 
-            return status, file_dir
+            return status, file_dir, ''
 
 
         except Exception as errorDesc:
@@ -83,4 +95,4 @@ class Decode():
             status = False
             Log(event = 'CONVERTENDO IMAGEM', error = errorDesc, terminal = False) # Gera Log de Execução
 
-            return status
+            return status, '', errorDesc
