@@ -1,0 +1,175 @@
+Event      : API - COMPROVANTES    
+Event Log  : DADOS RECEBIDOS 
+Registry   : 09/11/2022 - 21:30:04 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : API - COMPROVANTES    
+Event Log  : PROCESSANDO DADOS RECEBIDOS 
+Registry   : 09/11/2022 - 21:30:04 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : CONVERTENDO BINARIO    
+Event Log  : INICIANDO CONVERSAO DE BINARIO PARA ARQUIVO 
+Registry   : 09/11/2022 - 21:30:22 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : CONVERTENDO BINARIO    
+Event Log  : CONVERSAO REALIZADA COM SUCESSO 
+Registry   : 09/11/2022 - 21:30:22 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : CONVERTENDO IMAGEM    
+Event Log  : INICIANDO CONVERSAO DE IMAGEM PARA JPG 
+Registry   : 09/11/2022 - 21:30:22 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : CONVERTENDO IMAGEM    
+Event Log  : ARQUIVO: C:\USERS\THIAG\ONEDRIVE\PROJETO_DEV\PYTHON\API_FLASH\SYSTEM\/TEMP/JJH9IEFYZU.PDF 
+Registry   : 09/11/2022 - 21:30:22 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : CONVERTENDO IMAGEM    
+Event Log  : CONVERSAO REALIZADA COM SUCESSO 
+Registry   : 09/11/2022 - 21:30:22 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : API - COMPROVANTES    
+Event Log  : DADOS PROCESSANDO COM SUCESSO 
+Registry   : 09/11/2022 - 21:30:22 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : API - COMPROVANTES    
+Event Log  : DADOS RECEBIDOS 
+Registry   : 09/11/2022 - 21:30:27 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : API - COMPROVANTES    
+Event Log  : PROCESSANDO DADOS RECEBIDOS 
+Registry   : 09/11/2022 - 21:30:27 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : CONVERTENDO BINARIO    
+Event Log  : INICIANDO CONVERSAO DE BINARIO PARA ARQUIVO 
+Registry   : 09/11/2022 - 21:30:31 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : CONVERTENDO BINARIO    
+Event Log  : CONVERSAO REALIZADA COM SUCESSO 
+Registry   : 09/11/2022 - 21:30:31 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : CONVERTENDO IMAGEM    
+Event Log  : INICIANDO CONVERSAO DE IMAGEM PARA JPG 
+Registry   : 09/11/2022 - 21:30:31 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : CONVERTENDO IMAGEM    
+Event Log  : ARQUIVO: C:\USERS\THIAG\ONEDRIVE\PROJETO_DEV\PYTHON\API_FLASH\SYSTEM\/TEMP/10RFADSVE9.PDF 
+Registry   : 09/11/2022 - 21:30:31 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : CONVERTENDO IMAGEM    
+Event Log  : CONVERSAO REALIZADA COM SUCESSO 
+Registry   : 09/11/2022 - 21:30:31 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : CONVERTENDO IMAGEM    
+Event Log  : --- 
+Registry   : 09/11/2022 - 21:30:31 
+Error      : [WINERROR 32] O ARQUIVO JÁ ESTÁ SENDO USADO POR OUTRO PROCESSO: 'C:\\USERS\\THIAG\\ONEDRIVE\\PROJETO_DEV\\PYTHON\\API_FLASH\\SYSTEM\\/TEMP/10RFADSVE9.PDF'    
+
+-----------------------------------------------------------------------
+
+Event      : API - COMPROVANTES    
+Event Log  : --- 
+Registry   : 09/11/2022 - 21:30:31 
+Error      : [WINERROR 32] O ARQUIVO JÁ ESTÁ SENDO USADO POR OUTRO PROCESSO: 'C:\\USERS\\THIAG\\ONEDRIVE\\PROJETO_DEV\\PYTHON\\API_FLASH\\SYSTEM\\/TEMP/10RFADSVE9.PDF'    
+
+-----------------------------------------------------------------------
+
+Event      : API - COMPROVANTES    
+Event Log  : DADOS RECEBIDOS 
+Registry   : 09/11/2022 - 21:33:48 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : API - COMPROVANTES    
+Event Log  : PROCESSANDO DADOS RECEBIDOS 
+Registry   : 09/11/2022 - 21:33:48 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : CONVERTENDO BINARIO    
+Event Log  : INICIANDO CONVERSAO DE BINARIO PARA ARQUIVO 
+Registry   : 09/11/2022 - 21:33:52 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : CONVERTENDO BINARIO    
+Event Log  : CONVERSAO REALIZADA COM SUCESSO 
+Registry   : 09/11/2022 - 21:33:52 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : CONVERTENDO IMAGEM    
+Event Log  : INICIANDO CONVERSAO DE IMAGEM PARA JPG 
+Registry   : 09/11/2022 - 21:33:52 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : CONVERTENDO IMAGEM    
+Event Log  : ARQUIVO: C:\USERS\THIAG\ONEDRIVE\PROJETO_DEV\PYTHON\API_FLASH\SYSTEM\/TEMP/T5A03HATXB.PDF 
+Registry   : 09/11/2022 - 21:33:52 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : CONVERTENDO IMAGEM    
+Event Log  : CONVERSAO REALIZADA COM SUCESSO 
+Registry   : 09/11/2022 - 21:33:52 
+Error      : ---    
+
+-----------------------------------------------------------------------
+
+Event      : API - COMPROVANTES    
+Event Log  : DADOS PROCESSANDO COM SUCESSO 
+Registry   : 09/11/2022 - 21:33:52 
+Error      : ---    
+
+-----------------------------------------------------------------------
+

@@ -47,7 +47,7 @@ class Decode():
         try:
 
             # Cria o diretorio raiz
-            dirRaiz = f'{Configuracao.dir_raiz}\\temp\\'
+            dirRaiz = f'{Configuracao.dir_raiz}/temp/'
 
             # Valida se o diretorio existe
             if not os.path.exists(dirRaiz):

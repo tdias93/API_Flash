@@ -43,10 +43,10 @@ def ProcessaArquivo(dirProvisorio, extArquivo, integracao, cnpjCliente, numeroNf
     data = datetime.strptime(dtEmissao, '%Y-%m-%d')
 
     # Estrutura da pasta
-    estruturaPasta = f'{integracao}\\{str(data.year)}\\{listMes[data.month]}\\{str("%02d" % data.day)}\\'
+    estruturaPasta = f'{integracao}/{str(data.year)}/{listMes[data.month]}/{str("%02d" % data.day)}/'
 
     # Diretorio raiz
-    dirArquivo = f'{raiz}\\{estruturaPasta}'
+    dirArquivo = f'{raiz}/{estruturaPasta}'
 
     # Nome do arquivo
     nomeArquivo = f'{cnpjCliente}_{numeroNf}.jpg'
@@ -56,7 +56,7 @@ def ProcessaArquivo(dirProvisorio, extArquivo, integracao, cnpjCliente, numeroNf
         os.makedirs(dirArquivo)
 
     # Diretorio absoluto
-    dirArquivo = f'{dirArquivo}\\{nomeArquivo}'
+    dirArquivo = f'{dirArquivo}/{nomeArquivo}'
 
     try:
 
@@ -64,7 +64,7 @@ def ProcessaArquivo(dirProvisorio, extArquivo, integracao, cnpjCliente, numeroNf
         if extArquivo.upper() == '.PDF':
 
             filePath = dirProvisorio
-            popplerPath = f'{os.path.dirname(os.path.realpath(__file__))}\\system\\extra\poppler-0.68.0\\bin'
+            popplerPath = f'{os.path.dirname(os.path.realpath(__file__))}/system/extra/poppler-0.68.0/bin'
 
             # Valida SO
             if os.name == 'nt':
@@ -96,7 +96,7 @@ def ProcessaArquivo(dirProvisorio, extArquivo, integracao, cnpjCliente, numeroNf
         os.remove(dirProvisorio)
 
         status = True
-        url = host + estruturaPasta.replace('\\', '/') + nomeArquivo
+        url = host + estruturaPasta + nomeArquivo# estruturaPasta.replace('\\', '/') + nomeArquivo
 
         return status, url, ''
 
