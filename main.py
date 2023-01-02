@@ -134,5 +134,6 @@ schema = {
 }
 
 if __name__ == '__main__':
+    print('Iniciando serviço - v1.0')
     Configuracao
     app.run()
